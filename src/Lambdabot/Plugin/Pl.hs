@@ -18,7 +18,7 @@ import Lambdabot.Plugin.Pl.Transform       (transform)
 import Lambdabot.Plugin.Pl.Optimize        (optimize)
 
 import Data.IORef
-import System.Timeout
+import System.Timeout.Patched
 
 -- firstTimeout is the timeout when the expression is simplified for the first
 -- time. After each unsuccessful attempt, this number is doubled until it hits

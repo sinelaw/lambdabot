@@ -19,7 +19,7 @@ import Control.Monad.Trans( lift, liftIO )
 import Data.Char
 import System.Console.Haskeline
 import System.IO
-import System.Timeout
+import System.Timeout.Patched
 
 -- We need to track the number of active sourcings so that we can
 -- unregister the server (-> allow the bot to quit) when it is not
