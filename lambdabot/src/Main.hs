@@ -9,6 +9,7 @@ import Modules      (modulesInfo)
 
 import Control.Applicative
 import Control.Monad
+import Control.Monad.Identity
 import Data.Char
 import Data.Version
 import System.Console.GetOpt
@@ -16,7 +17,7 @@ import System.Environment
 import System.Exit
 import System.IO
 
-flags :: [OptDescr (IO (DSum Config))]
+flags :: [OptDescr (IO (DSum Config Identity))]
 flags = 
     [ Option "h?" ["help"]  (NoArg (usage []))                      "Print this help message"
     , Option "e"  []        (arg "<command>" onStartupCmds   strs)  "Run a lambdabot command instead of a REPL"
@@ -25,8 +26,8 @@ flags =
     , Option "V"  ["version"] (NoArg version)                       "Print the version of lambdabot"
     , Option "X"  []        (arg "<extension>" languageExts strs)   "Set a GHC language extension for @run"
     ] where 
-        arg :: String -> Config t -> (String -> IO t) -> ArgDescr (IO (DSum Config))
-        arg descr key fn = ReqArg (fmap (key :=>) . fn) descr
+        arg :: String -> Config t -> (String -> IO t) -> ArgDescr (IO (DSum Config Identity))
+        arg descr key fn = ReqArg (fmap (key ==>) . fn) descr
         
         strs = return . (:[])
         
@@ -71,4 +72,4 @@ main = do
 
 -- special online target for ghci use
 online :: [String] -> IO ()
-online strs = void (lambdabotMain modulesInfo [onStartupCmds :=> strs])
+online strs = void (lambdabotMain modulesInfo [onStartupCmds ==> strs])
