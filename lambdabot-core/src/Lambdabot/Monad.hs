@@ -18,9 +18,10 @@ module Lambdabot.Monad
     , IRCRWState(..)
     , initRwState
     
-    , LB(..)
+    , LB
+    , runLB
+    
     , MonadLB(..)
-    , evalLB
     
     , registerModule
     , registerCommands
@@ -162,15 +163,18 @@ initRwState = IRCRWState
 --
 -- instances Monad, Functor, MonadIO, MonadState, MonadError
 
-newtype LB a = LB { runLB :: ReaderT (IRCRState,IORef IRCRWState) IO a }
+newtype LB a = LB { unLB :: ReaderT (IRCRState, IORef IRCRWState) IO a }
     deriving (Functor, Applicative, Monad, MonadIO, MonadException)
+
+runLB :: LB a -> (IRCRState, IORef IRCRWState) -> IO a
+runLB = runReaderT . unLB
 
 instance MonadBase IO LB where
     liftBase = LB . liftBase
 
 instance MonadBaseControl IO LB where
     newtype StM LB a = StLB { unStLB :: StM (ReaderT (IRCRState,IORef IRCRWState) IO) a }
-    liftBaseWith action = LB (liftBaseWith (\run -> action (fmap StLB . run . runLB)))
+    liftBaseWith action = LB (liftBaseWith (\run -> action (fmap StLB . run . unLB)))
     restoreM = LB . restoreM . unStLB
 
 class (MonadIO m, MonadBaseControl IO m, MonadConfig m, MonadLogging m, Applicative m) => MonadLB m where
@@ -193,12 +197,6 @@ instance MonadConfig LB where
 instance MonadLogging LB where
     getCurrentLogger = getConfig lbRootLoggerPath
     logM a b c = io (logM a b c)
-
--- | run a computation in the LB monad
-evalLB :: LB a -> IRCRState -> IRCRWState -> IO a
-evalLB (LB lb') rs rws = do
-    ref  <- newIORef rws
-    runReaderT lb' (rs,ref)
 
 ---------------
 -- state management (registering/unregistering various things)
