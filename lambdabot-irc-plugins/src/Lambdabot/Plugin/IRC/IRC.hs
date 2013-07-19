@@ -123,14 +123,14 @@ online tag hostn portnum nickn ui = do
         putMVar sendmv ()
         SSem.signal sem1
     E.catch 
-        (addServer tag (io . sendMsg sock sendmv))
+        (registerServer tag (io . sendMsg sock sendmv))
         (\err@SomeException{} -> io (hClose sock) >> E.throwIO err)
     lb $ ircSignOn hostn (Nick tag nickn) ui
-    lb . void . fork $ E.catch
-        (readerLoop tag nickn sock)
+    void . fork $ E.catch
+        (lb $ readerLoop tag nickn sock)
         (\e@SomeException{} -> do
             errorM (show e)
-            remServer tag)
+            unregisterServer tag)
 
 readerLoop :: String -> String -> Handle -> LB ()
 readerLoop tag nickn sock = forever $ do

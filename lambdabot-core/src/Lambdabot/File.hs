@@ -4,6 +4,7 @@ module Lambdabot.File
     , outputDir
     ) where
 
+import Lambdabot.Config
 import Lambdabot.Config.Core
 import Lambdabot.Monad
 import Lambdabot.Util

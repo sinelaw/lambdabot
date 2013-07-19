@@ -8,6 +8,7 @@ module Lambdabot.Config.Core
     , editDistanceLimit
     , onStartupCmds
     , outputDir
+    , textWidth
     , uncaughtExceptionHandler
     
     , replaceRootLogger
@@ -31,6 +32,9 @@ config "disabledCommands"   [t| [String]                |] [| []            |]
 config "editDistanceLimit"  [t| Int                     |] [| 3 :: Int      |]
 configWithMerge [| (++) |] "onStartupCmds" [t| [String] |] [| ["offline"]   |]
 config "outputDir"          [t| FilePath                |] [| "State/"      |]
+
+-- IRC maximum msg length, minus a bit for safety.
+config "textWidth"          [t| Int                     |] [| 200 :: Int    |]
 
 -- basic logging.  for more complex setups, configure directly using System.Log.Logger
 config "replaceRootLogger"  [t| Bool                    |] [| True                        |]
