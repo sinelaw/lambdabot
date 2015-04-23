@@ -48,9 +48,10 @@ executable lambdabot
   ghc-options:          -Wall -threaded
   build-depends:        base                 >= 3 && < 5,
                         lambdabot-core,
-                        lambdabot-haskell-plugins,
                         lambdabot-irc-plugins,
-                        lambdabot-misc-plugins,
-                        lambdabot-novelty-plugins,
-                        lambdabot-reference-plugins,
-                        lambdabot-social-plugins
+                        -- lambdabot-misc-plugins,
+                        -- lambdabot-novelty-plugins,
+                        -- lambdabot-reference-plugins,
+                        -- lambdabot-social-plugins,
+                        lambdabot-markov-plugin,
+                        lambdabot-plugin-infernu

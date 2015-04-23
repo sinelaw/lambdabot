@@ -87,7 +87,7 @@ config = configWithMerge [| flip const |]
 -- is _not_ merged with the default - the default is discarded), and
 -- if they give more than one they are merged using the specified
 -- operation (in this case, `(++)`).
-configWithMerge :: ExpQ -> String -> TypeQ -> ExpQ -> Q [Dec]
+--configWithMerge :: ExpQ -> String -> TypeQ -> ExpQ -> Q [Dec]
 configWithMerge mergeQ nameStr tyQ defValQ = do
     let keyName = mkName nameStr
     tyName      <- newName (map toUpper nameStr)
@@ -97,7 +97,8 @@ configWithMerge mergeQ nameStr tyQ defValQ = do
     ty          <- tyQ
     defVal      <- defValQ
     mergeExpr   <- mergeQ
-    let tyDec   = DataD [] tyName [PlainTV tyVarName] [ForallC [] [EqualP (VarT tyVarName) ty] (NormalC conName [])] [''Typeable]
+    eq          <- equalP (varT tyVarName) tyQ
+    let tyDec   = DataD [] tyName [PlainTV tyVarName] [ForallC [] [eq] (NormalC conName [])] [''Typeable]
         keyDecs =
             [ SigD keyName (AppT (ConT ''Config) ty)
             , ValD (VarP keyName) (NormalB (ConE 'Config `AppE` ConE conName `AppE` defVal `AppE` mergeExpr)) []

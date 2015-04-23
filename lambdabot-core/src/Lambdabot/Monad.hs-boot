@@ -10,3 +10,5 @@ type role LB nominal
 #endif
 data LB a
 instance Monad LB
+instance Applicative LB
+instance Functor LB

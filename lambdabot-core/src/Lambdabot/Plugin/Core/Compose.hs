@@ -22,8 +22,8 @@ type Compose = ModuleT () LB
 composePlugin :: Module ()
 composePlugin = newModule
     { moduleCmds = return
-        [ (command "@")
-            { aliases = ["?"]
+        [ (command "~")
+            { aliases = [] --"?"]
             , help = do
                 c <- getCmdName
                 let cc = c++c

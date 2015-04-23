@@ -4,7 +4,7 @@
 module Main where
 
 import Lambdabot.Main
-import Lambdabot.Plugin.Haskell
+--import Lambdabot.Plugin.Haskell
 import Modules      (modulesInfo)
 
 import Control.Applicative
@@ -21,9 +21,9 @@ flags =
     [ Option "h?" ["help"]  (NoArg (usage []))                      "Print this help message"
     , Option "e"  []        (arg "<command>" onStartupCmds   strs)  "Run a lambdabot command instead of a REPL"
     , Option "l"  []        (arg "<level>"   consoleLogLevel level) "Set the logging level"
-    , Option "t"  ["trust"] (arg "<package>" trustedPackages strs)  "Trust the specified packages when evaluating code"
+--    , Option "t"  ["trust"] (arg "<package>" trustedPackages strs)  "Trust the specified packages when evaluating code"
     , Option "V"  ["version"] (NoArg version)                       "Print the version of lambdabot"
-    , Option "X"  []        (arg "<extension>" languageExts strs)   "Set a GHC language extension for @run"
+--    , Option "X"  []        (arg "<extension>" languageExts strs)   "Set a GHC language extension for @run"
     , Option "n"  ["nice"]  (NoArg noinsult)                        "Be nice (disable insulting error messages)"
     ] where 
         arg :: String -> Config t -> (String -> IO t) -> ArgDescr (IO (DSum Config))

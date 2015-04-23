@@ -70,7 +70,7 @@ data Module st = Module {
 
 ------------------------------------------------------------------------
 
-newModule :: Module st
+--newModule :: Module st
 newModule = Module
     { contextual         = \_ -> return ()
     , moduleCmds         = return []
